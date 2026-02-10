@@ -7,6 +7,12 @@
     <title>Us ❤️</title>
 
     <style>
+        html,
+        body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
         body {
             margin: 0;
             min-height: 100vh;
@@ -18,38 +24,39 @@
         }
 
         .gallery-container {
-            max-width: 1000px;
-            padding: 40px 20px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
             text-align: center;
-            position: relative;
+            box-sizing: border-box;
         }
 
         .title {
-            font-size: 2.2rem;
-            margin-bottom: 30px;
+            font-size: 2rem;
+            margin-bottom: 25px;
             color: #4a2c1d;
             font-weight: 700;
+            padding: 0 10px;
         }
 
         .polaroid-grid {
             display: grid;
-            grid-template-columns: repeat(5, 200px);
-            /* fixed card width */
-            gap: 25px;
-            justify-content: center;
-            /* 🔥 THIS centers the grid */
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            width: 100%;
+            justify-items: center;
             margin: 0 auto;
         }
 
-
-
         .polaroid {
             background: #fff;
-            padding: 10px 10px 25px;
-            width: 200px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            padding: 10px 10px 20px;
+            width: 100%;
+            max-width: 220px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             transform: rotate(var(--rotate));
             transition: transform 0.3s ease;
+            box-sizing: border-box;
         }
 
         .polaroid:hover {
@@ -59,22 +66,24 @@
 
         .polaroid img {
             width: 100%;
-            height: 200px;
+            aspect-ratio: 1/1;
             object-fit: cover;
             display: block;
         }
 
         .caption {
             margin-top: 8px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #6b3e2e;
+            line-height: 1.3;
         }
 
         .footer-text {
             margin-top: 40px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #4a2c1d;
             opacity: 0.9;
+            padding: 0 20px;
         }
 
         #music-btn {
@@ -96,27 +105,23 @@
             transform: scale(1.1);
         }
 
-
-
-        @media (max-width: 600px) {
-            .polaroid {
-                width: 150px;
-            }
-
-            .polaroid img {
-                height: 150px;
-            }
-        }
-
-        @media (max-width: 900px) {
-            .polaroid-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 600px) {
+        @media (max-width: 480px) {
             .polaroid-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .polaroid {
+                max-width: 100%;
+                padding: 6px 6px 15px;
+            }
+
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .caption {
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -175,6 +180,14 @@
                 <img src="images/10.jpeg">
                 <div class="caption">No matter where life takes us 💞</div>
             </div>
+            <div class="polaroid" style="--rotate:7deg">
+                <img src="images/11.jpeg">
+                <div class="caption">No matter the miles, my heart knows where it belongs 🧭❤️</div>
+            </div>
+                <div class="polaroid" style="--rotate:7deg">
+                    <img src="images/12.jpeg">
+                    <div class="caption">Every memory with you feels like a promise 💫</div>
+                </div>
         </div>
 
         <div class="footer-text">
