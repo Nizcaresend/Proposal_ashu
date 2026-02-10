@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Story | Kerala ↔ UK</title>
+    <style>
+        :root {
+            --primary-pink: #ff85a2;
+            --soft-rose: #ffc2d1;
+            --deep-rose: #ff4d6d;
+            --bg-gradient: linear-gradient(135deg, #fff0f3 0%, #ffc2d1 100%);
+            --text-color: #590d22;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        html,
+        body {
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            /* Extra insurance against scrolling */
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            max-width: 800px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .scene {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 1s ease forwards;
+            position: relative;
+        }
+
+        .scene.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 600;
+            margin: 0.5rem;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.2);
+        }
+
+        .btn-primary {
+            background: var(--deep-rose);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            background: #ff758f;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--deep-rose);
+        }
+
+        /* Scene 1 Specifics */
+        .locations {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .location-label {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(255, 133, 162, 0.3);
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px rgba(255, 133, 162, 0.3);
+            }
+
+            to {
+                box-shadow: 0 0 20px rgba(255, 133, 162, 0.6);
+            }
+        }
+
+        .plane-path {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            animation: airplaneDrive 4s infinite linear;
+        }
+
+        @keyframes airplaneDrive {
+            0% {
+                transform: translate(-150px, -20px) rotate(10deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(150px, -20px) rotate(10deg);
+                opacity: 0;
+            }
+        }
+
+        /* Scene 2 Specifics */
+        .dark-bg {
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffb3c1 100%);
+        }
+
+        .pulse-text {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Scene 3 Specifics */
+        .button-group {
+            position: relative;
+            width: 100%;
+            height: 60vh;
+            /* Give room to dodge within the scene */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        #no-btn {
+            position: absolute;
+            /* Relative to button-group */
+            z-index: 9999;
+            white-space: nowrap;
+        }
+
+        #yes-btn {
+            z-index: 10;
+        }
+
+        /* Final Scene */
+        .final-message {
+            font-size: 3rem;
+            color: var(--deep-rose);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .connecting-line {
+            position: absolute;
+            height: 2px;
+            background: rgba(255, 77, 109, 0.3);
+            border-top: 2px dashed var(--deep-rose);
+            z-index: -1;
+            top: 50%;
+            left: 20%;
+            right: 20%;
+        }
+
+        .typing::after {
+            content: '|';
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="container" id="app">
+        <!-- Scene 1: Distance Reality -->
+        <div id="scene-1" class="scene active">
+            <div class="locations">
+                <div class="location-label">Kerala 🌴</div>
+                <div class="plane-path">✈️</div>
+                <div class="location-label">UK 🎡</div>
+            </div>
+            <h1 id="s1-title">Kerala ➝ UK 🌍</h1>
+            <p id="s1-text-1" style="opacity: 0;">Miles apart...</p>
+            <p id="s1-text-2" style="opacity: 0;">Different time zones...</p>
+            <p id="s1-text-3" style="opacity: 0;">But you’re still on my mind every day 💗</p>
+        </div>
+
+        <!-- Scene 2: Apology & Vulnerability -->
+        <div id="scene-2" class="scene">
+            <h1 class="pulse-text">One Moment...</h1>
+            <div id="s2-messages">
+                <p class="s2-msg" style="display: none;">I know I’m not perfect...</p>
+                <p class="s2-msg" style="display: none;">I know I’ve hurt you sometimes...</p>
+                <p class="s2-msg" style="display: none;">I’m sorry for every trouble I caused you 🥺</p>
+                <p class="s2-msg" style="display: none;">Distance made things harder...</p>
+                <p class="s2-msg" style="display: none;">But my feelings for you never changed 💔</p>
+            </div>
+            <button class="btn btn-primary" id="btn-to-s3" style="display: none; margin-top: 20px;">One honest
+                question...</button>
+        </div>
+
+        <!-- Scene 3: The Choice -->
+        <div id="scene-3" class="scene">
+            <h1>Will you still choose me? 💖</h1>
+            <div class="button-group">
+                <button class="btn btn-primary" id="yes-btn">✅ Yes</button>
+                <button class="btn btn-secondary" id="no-btn">❌ No 😐</button>
+            </div>
+        </div>
+
+        <!-- Scene 4: Emotional Payoff -->
+        <div id="scene-4" class="scene">
+            <h1 class="final-message" id="s4-payoff">YAYYYY 😍 I knew it!!!</h1>
+            <div id="s4-typing-container">
+                <p id="s4-main-text" class="typing"></p>
+            </div>
+            <div id="final-touch" style="display: none; margin-top: 30px;">
+                <a href="gallery.html" class="btn btn-primary" id="btn-final">
+                    I’m still choosing us ❤️
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let isDodging = false;
+
+        // --- Particle System ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let hearts = [];
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Heart {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 15 + 10;
+                this.speed = Math.random() * 1 + 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotSpeed = (Math.random() - 0.5) * 0.02;
+            }
+            update() {
+                this.y -= this.speed;
+                this.rotation += this.rotSpeed;
+                if (this.y < -this.size) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = '#ff85a2';
+                ctx.beginPath();
+                const d = this.size;
+                ctx.moveTo(0, d / 4);
+                ctx.bezierCurveTo(0, 0, -d / 2, 0, -d / 2, d / 4);
+                ctx.bezierCurveTo(-d / 2, d / 2, 0, d * 3 / 4, 0, d);
+                ctx.bezierCurveTo(0, d * 3 / 4, d / 2, d / 2, d / 2, d / 4);
+                ctx.bezierCurveTo(d / 2, 0, 0, 0, 0, d / 4);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 30; i++) {
+            hearts.push(new Heart());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hearts.forEach(h => {
+                h.update();
+                h.draw();
+            });
+            particles.forEach((p, i) => {
+                p.update();
+                p.draw();
+                if (p.life <= 0) particles.splice(i, 1);
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // --- Scene Management ---
+        function showScene(id) {
+            const scenes = document.querySelectorAll('.scene');
+            scenes.forEach(s => {
+                if (s.classList.contains('active')) {
+                    s.style.animation = 'fadeOut 0.5s ease forwards';
+                    setTimeout(() => {
+                        s.classList.remove('active');
+                        const next = document.getElementById(id);
+                        next.classList.add('active');
+                        next.style.animation = 'fadeIn 1s ease forwards';
+                        if (id === 'scene-2') playScene2();
+                    }, 500);
+                }
+            });
+        }
+
+        // --- Scene 1 Logic ---
+        setTimeout(() => {
+            const texts = ['s1-text-1', 's1-text-2', 's1-text-3'];
+            texts.forEach((id, i) => {
+                setTimeout(() => {
+                    document.getElementById(id).style.opacity = '1';
+                    document.getElementById(id).style.transition = 'opacity 1s';
+                }, i * 1000);
+            });
+        }, 1000);
+
+        setTimeout(() => showScene('scene-2'), 6000);
+
+        // --- Scene 2 Logic ---
+        function playScene2() {
+            document.body.classList.add('dark-bg');
+            const msgs = document.querySelectorAll('.s2-msg');
+            msgs.forEach((msg, i) => {
+                setTimeout(() => {
+                    msg.style.display = 'block';
+                    msg.style.animation = 'fadeIn 1s ease forwards';
+                }, i * 1500);
+            });
+            setTimeout(() => {
+                const btn = document.getElementById('btn-to-s3');
+                btn.style.display = 'block';
+                btn.style.animation = 'fadeIn 1s ease forwards';
+            }, msgs.length * 1500 + 500);
+        }
+
+        document.getElementById('btn-to-s3').onclick = () => showScene('scene-3');
+
+        // --- Scene 3 Logic (No Button) ---
+        const noBtn = document.getElementById('no-btn');
+        const yesBtn = document.getElementById('yes-btn');
+        const buttonGroup = document.querySelector('.button-group');
+        let dodgeCount = 0;
+        const noTexts = [
+            '❌ No 😐',
+            'Are you sure? 😶',
+            'Please think again 🥺',
+            'Don’t break my heart 💔',
+            'Okay okay… stop 😭',
+            'This distance is already hard 💭',
+            'I’m still trying for us 💗',
+            'Just… don’t give up on me 🫶',
+            'I still choose you every day 🌍',
+            'Alright… I’ll wait ❤️',
+            'I’ll wait Till you say Yes'
+        ];
+
+        function moveNoBtn() {
+            if (isDodging) return;
+            isDodging = true;
+
+            yesBtn.style.pointerEvents = 'none';
+
+            const maxX = buttonGroup.offsetWidth - noBtn.offsetWidth;
+            const maxY = buttonGroup.offsetHeight - noBtn.offsetHeight;
+
+            noBtn.style.left = `${Math.random() * maxX}px`;
+            noBtn.style.top = `${Math.random() * maxY}px`;
+
+            noBtn.innerText = noTexts[Math.min(dodgeCount, noTexts.length - 1)];
+            dodgeCount++;
+
+            setTimeout(() => {
+                yesBtn.style.pointerEvents = 'auto';
+                isDodging = false;
+            }, 400);
+        }
+
+        // Proactive dodging relative to container
+        buttonGroup.addEventListener('mousemove', (e) => {
+            if (!document.getElementById('scene-3').classList.contains('active')) return;
+
+            const rect = noBtn.getBoundingClientRect();
+            // Mouse position relative to the buttonGroup
+            const groupRect = buttonGroup.getBoundingClientRect();
+            const mouseX = e.clientX - groupRect.left;
+            const mouseY = e.clientY - groupRect.top;
+
+            // Button center relative to the buttonGroup
+            const btnCenterX = noBtn.offsetLeft + noBtn.offsetWidth / 2;
+            const btnCenterY = noBtn.offsetTop + noBtn.offsetHeight / 2;
+
+            const distance = Math.sqrt(
+                Math.pow(mouseX - btnCenterX, 2) +
+                Math.pow(mouseY - btnCenterY, 2)
+            );
+
+            // Dodge if mouse gets closer than 100px
+            if (distance < 120) {
+                moveNoBtn();
+            }
+        });
+
+        // noBtn.onmouseover = moveNoBtn;
+        noBtn.onclick = (e) => {
+            e.preventDefault();
+            moveNoBtn();
+        };
+
+        // --- Scene 4 Heart Burst ---
+        class BurstParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 10;
+                this.vy = (Math.random() - 0.5) * 10;
+                this.life = 100;
+                this.size = Math.random() * 8 + 4;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= 2;
+                this.vy += 0.1; // gravity for burst
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 77, 109, ${this.life / 100})`;
+                ctx.font = `${this.size}px Arial`;
+                ctx.fillText('❤️', this.x, this.y);
+            }
+        }
+
+        yesBtn.onclick = () => {
+            document.body.classList.remove('dark-bg');
+            const rect = yesBtn.getBoundingClientRect();
+            for (let i = 0; i < 50; i++) {
+                particles.push(new BurstParticle(rect.left + rect.width / 2, rect.top + rect.height / 2));
+            }
+            showScene('scene-4');
+            playFinalSequence();
+        };
+
+        // --- Scene 4 Typing Logic ---
+        function typeWriter(element, text, speed, callback) {
+            let i = 0;
+            element.innerText = '';
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            type();
+        }
+
+        function playFinalSequence() {
+            const payoff = document.getElementById('s4-payoff');
+            const mainText = document.getElementById('s4-main-text');
+            const finalTouch = document.getElementById('final-touch');
+
+            const messages = [
+                "Be mine 💍",
+                "Forever & always 💖",
+                "I love youuuu 😘"
+            ];
+
+            let msgIdx = 0;
+            const cycleMessages = () => {
+                if (msgIdx < messages.length) {
+                    payoff.style.animation = 'fadeOut 0.5s ease forwards';
+                    setTimeout(() => {
+                        payoff.innerText = messages[msgIdx];
+                        payoff.style.animation = 'fadeIn 0.5s ease forwards';
+                        msgIdx++;
+                        setTimeout(cycleMessages, 1500);
+                    }, 500);
+                } else {
+                    startEndQuote();
+                }
+            };
+
+            setTimeout(cycleMessages, 2000);
+
+            function startEndQuote() {
+                const quoteLines = [
+                    "I don’t promise a perfect relationship...",
+                    "I promise effort.",
+                    "",
+                    "Kerala or UK...",
+                    "My choice is still you ❤️"
+                ];
+
+                let lineIdx = 0;
+                function typeLines() {
+                    if (lineIdx < quoteLines.length) {
+                        const line = quoteLines[lineIdx];
+                        const newLine = document.createElement('p');
+                        newLine.style.opacity = '0';
+                        mainText.parentElement.appendChild(newLine);
+
+                        typeWriter(newLine, line, 50, () => {
+                            lineIdx++;
+                            setTimeout(typeLines, 1000);
+                        });
+                        newLine.style.opacity = '1';
+                    } else {
+                        finalTouch.style.display = 'block';
+                        finalTouch.style.animation = 'fadeIn 1s ease forwards';
+                        // Speed up hearts
+                        hearts.forEach(h => h.speed *= 2);
+                        // Add connecting line visual
+                        const line = document.createElement('div');
+                        line.className = 'connecting-line';
+                        document.body.appendChild(line);
+                    }
+                }
+                typeLines();
+            }
+        }
+
+        // document.getElementById('btn-final').onclick = (e) => {
+        //     e.target.style.transition = 'opacity 1s';
+        //     e.target.style.opacity = '0';
+        //     setTimeout(() => {
+        //         const end = document.createElement('p');
+        //         end.innerText = 'From someone who doesn’t want to lose you.';
+        //         end.style.fontSize = '0.9rem';
+        //         end.style.marginTop = '20px';
+        //         end.style.opacity = '0.7';
+        //         e.target.parentElement.appendChild(end);
+        //         e.target.remove();
+        //     }, 1000);
+        // };
+    </script>
+</body>
+
+</html>
