@@ -1,67 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Us ❤️</title>
-
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital@0;1&display=swap" rel="stylesheet">
     <style>
-        html,
-        body {
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --warm1: #caa07a;
+            --warm2: #efd9c4;
+            --dark: #4a2c1d;
+            --mid: #6b3e2e;
+            --cream: #fdf6ee;
+            --petal: #f2c4ce;
+        }
+
+        html, body {
             overflow-x: hidden;
             width: 100%;
         }
 
         body {
-            margin: 0;
             min-height: 100vh;
-            background: linear-gradient(135deg, #caa07a, #efd9c4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #ffc2d1 0%, #ff85a2 50%, #f5e0cc 100%);
+            font-family: 'Lora', serif;
+            cursor: default;
         }
 
+        /* ── FLOATING HEARTS CANVAS ── */
+        #heart-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── PETALS ── */
+        .petal {
+            position: fixed;
+            top: -40px;
+            pointer-events: none;
+            z-index: 1;
+            font-size: 1.2rem;
+            opacity: 0;
+            animation: petalFall linear infinite;
+        }
+
+        @keyframes petalFall {
+            0%   { transform: translateY(-40px) rotate(0deg) translateX(0); opacity: 0; }
+            10%  { opacity: 0.8; }
+            90%  { opacity: 0.6; }
+            100% { transform: translateY(105vh) rotate(720deg) translateX(60px); opacity: 0; }
+        }
+
+        /* ── HERO HEADER ── */
+        .hero {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 60px 20px 30px;
+        }
+
+        .hero-eyebrow {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--mid);
+            letter-spacing: 0.15em;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.9s ease forwards 0.3s;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 6vw, 4rem);
+            font-weight: 700;
+            color: var(--dark);
+            line-height: 1.1;
+            margin: 10px 0 6px;
+            opacity: 0;
+            transform: translateY(24px);
+            animation: fadeUp 1s ease forwards 0.6s;
+        }
+
+        .hero-title span {
+            font-style: italic;
+            background: linear-gradient(90deg, #9e4a2e, #c8703a, #9e4a2e);
+            background-size: 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 4s ease infinite 1.5s;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50%       { background-position: 100% 50%; }
+        }
+
+        .hero-sub {
+            font-size: 0.95rem;
+            color: var(--mid);
+            font-style: italic;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards 0.9s;
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 22px auto;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards 1.1s;
+        }
+        .divider-line {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--mid), transparent);
+        }
+        .divider-heart { font-size: 1rem; color: #c0604a; animation: heartbeat 1.5s ease-in-out infinite; }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            14%       { transform: scale(1.25); }
+            28%       { transform: scale(1); }
+            42%       { transform: scale(1.15); }
+            56%       { transform: scale(1); }
+        }
+
+        /* ── GALLERY ── */
         .gallery-container {
+            position: relative;
+            z-index: 2;
             width: 100%;
             max-width: 1200px;
-            padding: 20px;
-            text-align: center;
-            box-sizing: border-box;
-        }
-
-        .title {
-            font-size: 2rem;
-            margin-bottom: 25px;
-            color: #4a2c1d;
-            font-weight: 700;
-            padding: 0 10px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
         }
 
         .polaroid-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 20px;
-            width: 100%;
+            gap: 24px;
             justify-items: center;
-            margin: 0 auto;
         }
 
+        /* ── POLAROID CARD ── */
         .polaroid {
-            background: #fff;
-            padding: 10px 10px 20px;
+            background: #fffdf8;
+            padding: 10px 10px 28px;
             width: 100%;
             max-width: 220px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            transform: rotate(var(--rotate));
-            transition: transform 0.3s ease;
-            box-sizing: border-box;
+            box-shadow: 0 6px 24px rgba(74,44,29,0.18), 0 2px 6px rgba(0,0,0,0.08);
+            transform: rotate(var(--rotate)) translateY(40px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(.22,.68,0,1.2),
+                        box-shadow 0.4s ease,
+                        opacity 0.4s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .polaroid.visible {
+            opacity: 1;
+            transform: rotate(var(--rotate)) translateY(0);
         }
 
         .polaroid:hover {
-            transform: scale(1.05) rotate(0deg);
-            z-index: 5;
+            transform: scale(1.07) rotate(0deg) translateY(-6px) !important;
+            box-shadow: 0 20px 50px rgba(74,44,29,0.28), 0 4px 14px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        /* Tape strip on top */
+        .polaroid::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 44px;
+            height: 20px;
+            background: rgba(255,220,150,0.55);
+            border-radius: 2px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);
         }
 
         .polaroid img {
@@ -69,171 +198,419 @@
             aspect-ratio: 1/1;
             object-fit: cover;
             display: block;
+            filter: sepia(10%) brightness(1.02);
+            transition: filter 0.4s ease;
         }
+        .polaroid:hover img { filter: sepia(0%) brightness(1.06); }
 
         .caption {
-            margin-top: 8px;
-            font-size: 0.85rem;
-            color: #6b3e2e;
-            line-height: 1.3;
+            margin-top: 10px;
+            font-family: 'Lora', serif;
+            font-size: 0.78rem;
+            font-style: italic;
+            color: var(--mid);
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        /* ── HEART BURST on click ── */
+        .burst {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            font-size: 1.6rem;
+            z-index: 99;
+            animation: burstOut 0.7s ease forwards;
+        }
+        @keyframes burstOut {
+            0%   { opacity: 1; transform: translate(-50%, -50%) scale(0.3); }
+            60%  { opacity: 1; transform: translate(-50%, -70%) scale(1.4); }
+            100% { opacity: 0; transform: translate(-50%, -90%) scale(1.1); }
+        }
+
+        /* ── FOOTER ── */
+        .footer-section {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 10px 20px 80px;
         }
 
         .footer-text {
-            margin-top: 40px;
-            font-size: 1rem;
-            color: #4a2c1d;
-            opacity: 0.9;
-            padding: 0 20px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: var(--dark);
+            opacity: 0;
+            animation: fadeUp 1s ease forwards 2s;
         }
 
+        .footer-hearts {
+            margin-top: 14px;
+            font-size: 1.4rem;
+            letter-spacing: 6px;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards 2.3s;
+        }
+
+        /* ── SPARKLE TRAIL ── */
+        .sparkle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            font-size: 0.9rem;
+            animation: sparkleFade 0.8s ease forwards;
+        }
+        @keyframes sparkleFade {
+            0%   { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-30px) scale(0.4); }
+        }
+
+        /* ── MUSIC BUTTON ── */
         #music-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            font-size: 1.4rem;
-            padding: 10px 14px;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(255,253,248,0.92);
+            border: 1.5px solid rgba(74,44,29,0.15);
+            font-size: 1.3rem;
+            width: 52px; height: 52px;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 20px rgba(74,44,29,0.2);
             z-index: 100;
-            transition: transform 0.2s ease;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex; align-items: center; justify-content: center;
         }
-
         #music-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.15);
+            box-shadow: 0 10px 28px rgba(74,44,29,0.3);
+        }
+        #music-btn.playing { animation: musicPulse 1.5s ease-in-out infinite; }
+        @keyframes musicPulse {
+            0%, 100% { box-shadow: 0 6px 20px rgba(74,44,29,0.2); }
+            50%       { box-shadow: 0 6px 28px rgba(192,96,74,0.5); }
         }
 
+        /* ── GLOBAL ANIMATIONS ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── LIGHTBOX ── */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(30,12,6,0.88);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(6px);
+        }
+        .lightbox.open { display: flex; animation: lbIn 0.35s ease; }
+        @keyframes lbIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+        .lightbox-inner {
+            background: #fffdf8;
+            padding: 14px 14px 36px;
+            max-width: min(90vw, 480px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+            position: relative;
+            animation: lbCardIn 0.4s cubic-bezier(.22,.68,0,1.2);
+        }
+        @keyframes lbCardIn {
+            from { transform: scale(0.7) rotate(-3deg); opacity:0; }
+            to   { transform: scale(1) rotate(0deg);   opacity:1; }
+        }
+        .lightbox-inner img {
+            width: 100%; display: block;
+            filter: sepia(5%) brightness(1.03);
+        }
+        .lightbox-caption {
+            margin-top: 14px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--mid);
+            text-align: center;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: -16px; right: -16px;
+            background: var(--dark);
+            color: #fff;
+            border: none;
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        .lightbox-close:hover { transform: rotate(90deg) scale(1.1); }
+
+        /* ── RESPONSIVE ── */
         @media (max-width: 480px) {
-            .polaroid-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .polaroid {
-                max-width: 100%;
-                padding: 6px 6px 15px;
-            }
-
-            .title {
-                font-size: 1.5rem;
-            }
-
-            .caption {
-                font-size: 0.75rem;
-            }
+            .polaroid-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            .polaroid { max-width: 100%; padding: 6px 6px 22px; }
+            .caption { font-size: 0.72rem; }
         }
     </style>
 </head>
-
 <body>
 
-    <div class="gallery-container">
-        <div class="title">Still Us. Always Us. 🤍</div>
+<!-- Floating hearts canvas -->
+<canvas id="heart-canvas"></canvas>
 
-        <div class="polaroid-grid">
-            <div class="polaroid" style="--rotate:-8deg">
-                <img src="images/1.jpeg">
-                <div class="caption">That smile feels like home ❤️</div>
-            </div>
+<!-- Falling petals -->
+<div id="petals-container"></div>
 
-            <div class="polaroid" style="--rotate:6deg">
-                <img src="images/2.jpeg">
-                <div class="caption">Wherever I go, you’re my comfort ✈️</div>
-            </div>
-
-            <div class="polaroid" style="--rotate:-4deg">
-                <img src="images/3.jpeg">
-                <div class="caption">Us, in the simplest moments 🌿</div>
-            </div>
-
-            <div class="polaroid" style="--rotate:9deg">
-                <img src="images/4.jpeg">
-                <div class="caption">Even ordinary days feel special with you ☀️</div>
-            </div>
-
-            <div class="polaroid" style="--rotate:-6deg">
-                <img src="images/5.jpeg">
-                <div class="caption">Distance tried — love stayed stronger 🌍</div>
-            </div>
-
-            <div class="polaroid" style="--rotate:4deg">
-                <img src="images/6.jpeg">
-                <div class="caption">One of the memories I’ll always protect 🤍</div>
-            </div>
-
-            <div class="polaroid" style="--rotate:-10deg">
-                <img src="images/7.jpeg">
-                <div class="caption">Still choosing you, every single time </div>
-            </div>
-
-            <div class="polaroid" style="--rotate:7deg">
-                <img src="images/8.jpeg">
-                <div class="caption">Always you. Always us ❤️</div>
-            </div>
-            <div class="polaroid" style="--rotate:7deg">
-                <img src="images/9.jpeg">
-                <div class="caption">Your happiness is my favorite sight ✨</div>
-            </div>
-            <div class="polaroid" style="--rotate:7deg">
-                <img src="images/10.jpeg">
-                <div class="caption">No matter where life takes us 💞</div>
-            </div>
-            <div class="polaroid" style="--rotate:7deg">
-                <img src="images/11.jpeg">
-                <div class="caption">No matter the miles, my heart knows where it belongs 🧭❤️</div>
-            </div>
-                <div class="polaroid" style="--rotate:7deg">
-                    <img src="images/12.jpeg">
-                    <div class="caption">Every memory with you feels like a promise 💫</div>
-                </div>
-        </div>
-
-        <div class="footer-text">
-            No matter the distance — my heart stays with you.
-        </div>
+<!-- Hero -->
+<div class="hero">
+    <div class="hero-eyebrow">a little something for you 🌸</div>
+    <h1 class="hero-title">Still Us. <span>Always</span> Us.</h1>
+    <p class="hero-sub">Every photo, a memory I hold close.</p>
+    <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-heart">❤️</span>
+        <div class="divider-line"></div>
     </div>
-    <audio id="bg-music" loop>
-        <source src="audio/videoplayback.mp3" type="audio/mpeg">
-    </audio>
+</div>
 
-    <button id="music-btn">🎵</button>
+<!-- Gallery -->
+<div class="gallery-container">
+    <div class="polaroid-grid" id="grid">
 
-    <script>
-        const music = document.getElementById("bg-music");
-        const btn = document.getElementById("music-btn");
+        <div class="polaroid" style="--rotate:-8deg">
+            <img src="images/1.jpeg" alt="Photo 1">
+            <div class="caption">That smile feels like home ❤️</div>
+        </div>
+        <div class="polaroid" style="--rotate:6deg">
+            <img src="images/2.jpeg" alt="Photo 2">
+            <div class="caption">Wherever I go, you're my comfort ✈️</div>
+        </div>
+        <div class="polaroid" style="--rotate:-4deg">
+            <img src="images/3.jpeg" alt="Photo 3">
+            <div class="caption">Us, in the simplest moments 🌿</div>
+        </div>
+        <div class="polaroid" style="--rotate:9deg">
+            <img src="images/4.jpeg" alt="Photo 4">
+            <div class="caption">Even ordinary days feel special with you ☀️</div>
+        </div>
+        <div class="polaroid" style="--rotate:-6deg">
+            <img src="images/5.jpeg" alt="Photo 5">
+            <div class="caption">Distance tried — love stayed stronger 🌍</div>
+        </div>
+        <div class="polaroid" style="--rotate:4deg">
+            <img src="images/6.jpeg" alt="Photo 6">
+            <div class="caption">One of the memories I'll always protect 🤍</div>
+        </div>
+        <div class="polaroid" style="--rotate:-10deg">
+            <img src="images/7.jpeg" alt="Photo 7">
+            <div class="caption">Still choosing you, every single time</div>
+        </div>
+        <div class="polaroid" style="--rotate:7deg">
+            <img src="images/8.jpeg" alt="Photo 8">
+            <div class="caption">Always you. Always us ❤️</div>
+        </div>
+        <div class="polaroid" style="--rotate:-5deg">
+            <img src="images/9.jpeg" alt="Photo 9">
+            <div class="caption">Your happiness is my favourite sight ✨</div>
+        </div>
+        <div class="polaroid" style="--rotate:3deg">
+            <img src="images/10.jpeg" alt="Photo 10">
+            <div class="caption">No matter where life takes us 💞</div>
+        </div>
+        <div class="polaroid" style="--rotate:-7deg">
+            <img src="images/11.jpeg" alt="Photo 11">
+            <div class="caption">No matter the miles, my heart knows where it belongs 🧭❤️</div>
+        </div>
+        <div class="polaroid" style="--rotate:5deg">
+            <img src="images/12.jpeg" alt="Photo 12">
+            <div class="caption">Every memory with you feels like a promise 💫</div>
+        </div>
 
-        music.volume = 0.4; // soft romantic volume
+    </div>
+</div>
 
-        // Try autoplay on load
-        window.addEventListener("load", () => {
-            const playPromise = music.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => {
-                    // Autoplay blocked — wait for first interaction
-                    document.addEventListener("click", startMusicOnce, { once: true });
-                });
-            }
-        });
+<!-- Footer -->
+<div class="footer-section">
+    <p class="footer-text">No matter the distance — my heart stays with you.</p>
+    <div class="footer-hearts">🌸 ❤️ 🌸</div>
+</div>
 
-        function startMusicOnce() {
-            music.play();
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+    <div class="lightbox-inner" id="lb-inner">
+        <button class="lightbox-close" id="lb-close">✕</button>
+        <img id="lb-img" src="" alt="">
+        <div class="lightbox-caption" id="lb-caption"></div>
+    </div>
+</div>
+
+<!-- Audio -->
+<audio id="bg-music" loop>
+    <source src="audio/videoplayback.mp3" type="audio/mpeg">
+</audio>
+<button id="music-btn">🎵</button>
+
+<script>
+/* ────────── FALLING PETALS ────────── */
+const petalEmojis = ['🌸','🌺','🍂','💮','🌷'];
+const petalsContainer = document.getElementById('petals-container');
+for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = petalEmojis[i % petalEmojis.length];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.fontSize = (0.8 + Math.random() * 1) + 'rem';
+    p.style.animationDuration = (6 + Math.random() * 8) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    petalsContainer.appendChild(p);
+}
+
+/* ────────── FLOATING HEARTS CANVAS ────────── */
+const canvas = document.getElementById('heart-canvas');
+const ctx    = canvas.getContext('2d');
+
+function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const hearts = Array.from({length: 22}, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight + window.innerHeight,
+    size: 8 + Math.random() * 18,
+    speed: 0.4 + Math.random() * 0.8,
+    opacity: 0.08 + Math.random() * 0.18,
+    drift: (Math.random() - 0.5) * 0.5,
+    wobble: Math.random() * Math.PI * 2
+}));
+
+function drawHeart(cx, cy, size, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = '#c0604a';
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.bezierCurveTo(cx, cy - size * 0.3, cx - size * 0.5, cy - size * 0.6, cx - size * 0.5, cy - size * 0.3);
+    ctx.bezierCurveTo(cx - size * 0.5, cy - size * 0.7, cx, cy - size * 0.7, cx, cy - size * 0.4);
+    ctx.bezierCurveTo(cx, cy - size * 0.7, cx + size * 0.5, cy - size * 0.7, cx + size * 0.5, cy - size * 0.3);
+    ctx.bezierCurveTo(cx + size * 0.5, cy - size * 0.6, cx, cy - size * 0.3, cx, cy);
+    ctx.fill();
+    ctx.restore();
+}
+
+function animateHearts() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    hearts.forEach(h => {
+        h.y -= h.speed;
+        h.x += Math.sin(h.wobble) * h.drift;
+        h.wobble += 0.02;
+        if (h.y < -40) {
+            h.y = canvas.height + 20;
+            h.x = Math.random() * canvas.width;
         }
+        drawHeart(h.x, h.y, h.size, h.opacity);
+    });
+    requestAnimationFrame(animateHearts);
+}
+animateHearts();
 
-        // Toggle button
-        btn.addEventListener("click", () => {
-            if (music.paused) {
-                music.play();
-                btn.textContent = "🔊";
-            } else {
-                music.pause();
-                btn.textContent = "🔇";
-            }
-        });
-    </script>
+/* ────────── SCROLL REVEAL ────────── */
+const cards = document.querySelectorAll('.polaroid');
+const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, _) => {
+        if (entry.isIntersecting) {
+            const delay = Array.from(cards).indexOf(entry.target) * 80;
+            setTimeout(() => entry.target.classList.add('visible'), delay);
+            observer.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.1 });
+cards.forEach(c => observer.observe(c));
 
+/* ────────── HEART BURST ON CLICK ────────── */
+cards.forEach(card => {
+    card.addEventListener('click', function(e) {
+        const burst = document.createElement('span');
+        burst.className = 'burst';
+        burst.textContent = ['❤️','💕','💖','💗','💞'][Math.floor(Math.random()*5)];
+        this.style.position = 'relative';
+        this.appendChild(burst);
+        setTimeout(() => burst.remove(), 700);
 
+        // open lightbox
+        const img = this.querySelector('img');
+        const cap = this.querySelector('.caption').textContent;
+        document.getElementById('lb-img').src     = img.src;
+        document.getElementById('lb-caption').textContent = cap;
+        document.getElementById('lightbox').classList.add('open');
+    });
+});
+
+/* ────────── LIGHTBOX CLOSE ────────── */
+document.getElementById('lb-close').addEventListener('click', () => {
+    document.getElementById('lightbox').classList.remove('open');
+});
+document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+});
+
+/* ────────── CURSOR SPARKLE TRAIL ────────── */
+const sparkleChars = ['✦','✧','⋆','·','˚','❤','✿'];
+let lastSparkle = 0;
+document.addEventListener('mousemove', e => {
+    const now = Date.now();
+    if (now - lastSparkle < 80) return;
+    lastSparkle = now;
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.textContent = sparkleChars[Math.floor(Math.random() * sparkleChars.length)];
+    s.style.left = (e.clientX + (Math.random()*20 - 10)) + 'px';
+    s.style.top  = (e.clientY + (Math.random()*20 - 10)) + 'px';
+    s.style.color = `hsl(${20 + Math.random()*30}, 80%, ${50 + Math.random()*20}%)`;
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 800);
+});
+
+/* ────────── MUSIC ────────── */
+const music = document.getElementById('bg-music');
+const btn   = document.getElementById('music-btn');
+music.volume = 0.4;
+
+window.addEventListener('load', () => {
+    const p = music.play();
+    if (p !== undefined) {
+        p.then(() => btn.classList.add('playing'))
+         .catch(() => document.addEventListener('click', startOnce, { once: true }));
+    }
+});
+
+function startOnce() {
+    music.play();
+    btn.classList.add('playing');
+}
+
+btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (music.paused) {
+        music.play();
+        btn.textContent = '🔊';
+        btn.classList.add('playing');
+    } else {
+        music.pause();
+        btn.textContent = '🔇';
+        btn.classList.remove('playing');
+    }
+});
+</script>
 </body>
-
 </html>
